@@ -3,3 +3,15 @@ spring:
     username: ${app.dbUsername:root}
     password: ${app.dbPassword:123456}
     url: jdbc:mysql://${app.dbHost:127.0.0.1}:3306/sharding?useUnicode=true&characterEncoding=utf-8&useSSL=false
+
+zst:
+  sharding:
+    datasources:
+      ds0:
+        url: jdbc:mysql://${app.dbHost:127.0.0.1}:3306/sharding_0?useUnicode=true&characterEncoding=utf-8&useSSL=false
+        username: ${app.dbUsername:root}
+        password: ${app.dbPassword:123456}
+      ds1:
+        url: jdbc:mysql://${app.dbHost:127.0.0.1}:3306/sharding_1?useUnicode=true&characterEncoding=utf-8&useSSL=false
+        username: ${app.dbUsername:root}
+        password: ${app.dbPassword:123456}

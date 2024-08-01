@@ -1,0 +1,9 @@
+CREATE TABLE t_user (
+    id BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    name VARCHAR(255) DEFAULT NULL COMMENT '用户名',
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE t_user_01 LIKE t_user;
+CREATE TABLE t_user_02 LIKE t_user;
+CREATE TABLE t_user_00 LIKE t_user;
