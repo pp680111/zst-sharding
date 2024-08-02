@@ -10,6 +10,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
+/**
+ * 聚合了多个DataSource，并提供路由功能的DataSource
+ */
 public class ShardingDataSource extends AbstractRoutingDataSource {
     private ShardingProperties properties;
 
@@ -19,6 +22,7 @@ public class ShardingDataSource extends AbstractRoutingDataSource {
         }
 
         this.properties = properties;
+        prepareDataSource();
     }
 
     /**

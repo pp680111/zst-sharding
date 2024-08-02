@@ -8,9 +8,6 @@ import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Signature;
 import org.springframework.stereotype.Component;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-
 /**
  * StatementHandler是MyBatis中负责代理执行jdbc中的Statement的各种接口的类，
  *
