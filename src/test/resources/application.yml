@@ -10,8 +10,10 @@ zst:
       ds0:
         url: jdbc:mysql://${app.dbHost:127.0.0.1}:3306/sharding_0?useUnicode=true&characterEncoding=utf-8&useSSL=false
         username: ${app.dbUsername:root}
-        password: ${app.dbPassword:123456}
+        password: ${app.dbPassword:avamasterA@#}
       ds1:
         url: jdbc:mysql://${app.dbHost:127.0.0.1}:3306/sharding_1?useUnicode=true&characterEncoding=utf-8&useSSL=false
         username: ${app.dbUsername:root}
-        password: ${app.dbPassword:123456}
+        password: ${app.dbPassword:avamasterA@#}
+mybatis:
+  config-location: classpath:mybatis-config.xml

@@ -1,6 +1,7 @@
 package com.zst.sharding.config;
 
 import com.zst.sharding.datasource.ShardingDataSource;
+import org.mybatis.spring.mapper.MapperFactoryBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,4 +15,5 @@ public class AppConfiguration {
     public DataSource shardingDataSource(ShardingProperties properties) {
         return new ShardingDataSource(properties);
     }
+
 }
