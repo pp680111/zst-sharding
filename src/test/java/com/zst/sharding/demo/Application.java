@@ -1,6 +1,6 @@
 package com.zst.sharding.demo;
 
-import com.zst.sharding.plugins.ShardingMapperFactoryBean;
+import com.zst.sharding.mybatis.plugins.ShardingMapperFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

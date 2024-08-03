@@ -1,4 +1,4 @@
-package com.zst.sharding.plugins;
+package com.zst.sharding.mybatis.plugins;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.statement.StatementHandler;
