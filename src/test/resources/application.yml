@@ -15,5 +15,16 @@ zst:
         url: jdbc:mysql://${app.dbHost:127.0.0.1}:3306/sharding_1?useUnicode=true&characterEncoding=utf-8&useSSL=false
         username: ${app.dbUsername:root}
         password: ${app.dbPassword:avamasterA@#}
+    tables:
+      user:
+        actualDataNodes: sharding_0.t_user_00,sharding_0.t_user_01,sharding_0.t_user_02,sharding_1.t_user_00,sharding_1.t_user_01,sharding_1.t_user_02
+        databaseStrategy:
+          standard:
+            shardingColumn: id
+            algorithmExpression: sharding_${id % 2}
+        tableStrategy:
+          standard:
+            shardingColumn: id
+            algorithmExpression: t_user_${id % 3}
 mybatis:
   config-location: classpath:mybatis-config.xml

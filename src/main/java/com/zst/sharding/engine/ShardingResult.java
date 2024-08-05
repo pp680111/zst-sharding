@@ -7,4 +7,6 @@ import lombok.Setter;
 @Setter
 public class ShardingResult {
     private String targetDataSource;
+    private String targetSchema;
+    private String targetTable;
 }
