@@ -19,12 +19,12 @@ zst:
       user:
         actualDataNodes: sharding_0.t_user_00,sharding_0.t_user_01,sharding_0.t_user_02,sharding_1.t_user_00,sharding_1.t_user_01,sharding_1.t_user_02
         databaseStrategy:
-          standard:
-            shardingColumn: id
-            algorithmExpression: sharding_${id % 2}
+          type: hash
+          shardingColumn: id
+          algorithmExpression: sharding_${id % 2}
         tableStrategy:
-          standard:
-            shardingColumn: id
-            algorithmExpression: t_user_${id % 3}
+          type: hash
+          shardingColumn: id
+          algorithmExpression: t_user_${id % 3}
 mybatis:
   config-location: classpath:mybatis-config.xml

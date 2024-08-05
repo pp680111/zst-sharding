@@ -2,6 +2,7 @@ package com.zst.sharding.engine;
 
 import com.zst.sharding.config.ShardingProperties;
 import com.zst.sharding.engine.strategy.ShardingStrategy;
+import com.zst.sharding.engine.strategy.ShardingStrategyFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -40,7 +41,18 @@ public class StandardShardingEngine implements ShardingEngine {
         }
 
         tables.forEach((tableName, tableProperties) -> {
-            tableProperties.getActualDataNodes().fo
+            tableProperties.getActualDataNodes().forEach(actualDataNode -> {
+                // actualDataNode的值格式为ds0.t_user_00
+                String[] split = actualDataNode.split("\\.");
+                // 这里这两个map添加进去的值没看懂
+                actualDatabaseNames.add(split[0], split[1]);
+                actualTableNames.add(split[1], split[0]);
+            });
+
+            databaseStrategy.put(tableName, ShardingStrategyFactory.getShardingStrategy(tableProperties.getDatabaseStrategy()));
+            tableStrategy.put(tableName, ShardingStrategyFactory.getShardingStrategy(tableProperties.getTableStrategy()));
         });
+
+
     }
 }
