@@ -1,3 +1,5 @@
 实现分库分表的思路：
 1. 自行实现jdbc协议定义的接口，在实现中封装处理分库分表的逻辑（这种方式代码量非常大，因为jdbc api的接口非常的多）
 2. 基于orm提供的interceptor类的机制来实现对sql的拦截，比如MyBatis提供的plugin机制
+
+在MapperFactoryBean中插入调用ShardingEngine的逻辑，在StatementINterceptor中完成sql的替换

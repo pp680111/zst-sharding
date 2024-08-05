@@ -41,6 +41,7 @@ public class ShardingMapperFactoryBean<T> extends MapperFactoryBean<T> {
             String mapperId = mapperClazz.getName() + "." + method.getName();
             MappedStatement mappedStatement = configuration.getMappedStatement(mapperId);
             BoundSql boundSql = mappedStatement.getBoundSql(args);
+            // TODO 调用ShardingEngine计算分片结果
 
             return method.invoke(mapperProxyObj, args);
         });
