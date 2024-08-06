@@ -1,5 +1,10 @@
 package com.zst.sharding.engine;
 
+import com.alibaba.druid.sql.SQLUtils;
+import com.alibaba.druid.sql.ast.SQLExpr;
+import com.alibaba.druid.sql.ast.SQLStatement;
+import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
+import com.alibaba.druid.sql.ast.statement.SQLInsertStatement;
 import com.zst.sharding.config.ShardingProperties;
 import com.zst.sharding.engine.strategy.ShardingStrategy;
 import com.zst.sharding.engine.strategy.ShardingStrategyFactory;
@@ -7,6 +12,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,11 +21,11 @@ import java.util.Map;
 public class StandardShardingEngine implements ShardingEngine {
     private ShardingProperties properties;
     /**
-     * schema名称与这个schema内有多少要使用到的table名称的map，比如ds0->[t_user_0,t_user_1,t_item_0,t_item_1],ds1->[t_user_0,t_user_1,t_item_0,t_item_1]
+     * schema名称与这个schema内有多少要使用到的table名称的map，比如db0->[t_user_0,t_user_1,t_item_0,t_item_1],db1->[t_user_0,t_user_1,t_item_0,t_item_1]
      */
     private final MultiValueMap<String, String> actualDatabaseNames = new LinkedMultiValueMap<>();
     /**
-     * table名称
+     * table
      */
     private final MultiValueMap<String, String> actualTableNames = new LinkedMultiValueMap<>();
     private final Map<String, ShardingStrategy> databaseStrategy = new HashMap<>();
@@ -31,6 +37,31 @@ public class StandardShardingEngine implements ShardingEngine {
 
     @Override
     public ShardingResult sharding(String sql, Object[] args) {
+        SQLStatement sqlStatement = SQLUtils.parseSingleMysqlStatement(sql);
+
+        // insert语句的解析逻辑有所不同
+        if (sqlStatement instanceof SQLInsertStatement sqlInsertStatement) {
+            String tableName = sqlInsertStatement.getTableName().getSimpleName();
+
+            // 转换一个columnName->args的map
+            List<SQLExpr> columns = sqlInsertStatement.getColumns();
+            Map<String, Object> columnParams = new HashMap<>();
+            for (int i = 0; i < columns.size(); i++) {
+                SQLIdentifierExpr column = (SQLIdentifierExpr) columns.get(i);
+                columnParams.put(column.getSimpleName(), args[i]);
+            }
+
+            // TODO actualDatabaseName的key是schema名称不是table名称吧，这怎么拿到数据的
+            ShardingStrategy dbStrategy = databaseStrategy.get(tableName);
+            String targetDatabaseName = dbStrategy.doSharding(actualDatabaseNames.get(tableName), tableName, columnParams);
+
+            // TODO 这里也有一样的问题，难不成是因为现在用的ShardingStrategy里面用不到前两个参数就乱来了？
+            ShardingStrategy tableStrategy = this.tableStrategy.get(tableName);
+            String targetTableName = tableStrategy.doSharding(actualTableNames.get(tableName), tableName, columnParams);
+        } else {
+            // TODO select update delete的处理
+        }
+
         return null;
     }
 
@@ -52,7 +83,5 @@ public class StandardShardingEngine implements ShardingEngine {
             databaseStrategy.put(tableName, ShardingStrategyFactory.getShardingStrategy(tableProperties.getDatabaseStrategy()));
             tableStrategy.put(tableName, ShardingStrategyFactory.getShardingStrategy(tableProperties.getTableStrategy()));
         });
-
-
     }
 }
