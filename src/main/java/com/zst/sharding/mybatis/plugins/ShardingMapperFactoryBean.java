@@ -1,5 +1,6 @@
 package com.zst.sharding.mybatis.plugins;
 
+import com.zst.sharding.engine.ShardingEngine;
 import com.zst.sharding.utils.ReflectionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.mapping.BoundSql;
