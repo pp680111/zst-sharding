@@ -16,7 +16,7 @@ zst:
         username: ${app.dbUsername:root}
         password: ${app.dbPassword:avamasterA@#}
     tables:
-      user:
+      t_user:
         actualDataNodes: sharding_0.t_user_00,sharding_0.t_user_01,sharding_0.t_user_02,sharding_1.t_user_00,sharding_1.t_user_01,sharding_1.t_user_02
         databaseStrategy:
           type: hash
