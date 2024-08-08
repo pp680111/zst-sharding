@@ -7,3 +7,12 @@ CREATE TABLE t_user (
 CREATE TABLE t_user_01 LIKE t_user;
 CREATE TABLE t_user_02 LIKE t_user;
 CREATE TABLE t_user_00 LIKE t_user;
+
+CREATE TABLE t_order (
+    id BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    uid BIGINT NOT NULL,
+    PRIMARY KEY (id)
+);
+CREATE TABLE t_order_01 LIKE t_order;
+CREATE TABLE t_order_02 LIKE t_order;
+CREATE TABLE t_order_00 LIKE t_order;

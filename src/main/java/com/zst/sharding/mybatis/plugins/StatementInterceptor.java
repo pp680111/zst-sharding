@@ -38,9 +38,8 @@ public class StatementInterceptor implements Interceptor {
             return invocation.proceed();
         }
 
-        // TODO 实现sql对应的库和表的替换
         BoundSql boundSql = statementHandler.getBoundSql();
-
+        hackBoundSql(boundSql, shardingResult.getTargetSql());
         return invocation.proceed();
     }
 

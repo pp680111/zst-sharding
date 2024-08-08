@@ -11,4 +11,5 @@ public class ShardingResult {
     private String targetDataSource;
     private String targetSchema;
     private String targetTable;
+    private String targetSql;
 }

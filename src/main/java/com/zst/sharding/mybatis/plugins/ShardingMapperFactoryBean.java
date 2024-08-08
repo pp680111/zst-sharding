@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ShardingMapperFactoryBean<T> extends MapperFactoryBean<T> {
     public ShardingMapperFactoryBean() {
-
+        // TODO 怎么吧shardingengine传进来。。。
     }
 
     public ShardingMapperFactoryBean(Class<T> mapperInterface) {

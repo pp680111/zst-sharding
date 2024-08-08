@@ -74,6 +74,10 @@ public class StandardShardingEngine implements ShardingEngine {
             }
         }
 
+        if (!checkIsNeedSharding(tableName)) {
+            return new ShardingResult(null, null, null, sql);
+        }
+
         // TODO actualDatabaseName的key是schema名称不是table名称吧，这怎么拿到数据的
         ShardingStrategy dbStrategy = databaseStrategy.get(tableName);
         String targetDatabaseName = dbStrategy.doSharding(actualDatabaseNames.get(tableName), tableName, columnParams);
@@ -82,7 +86,8 @@ public class StandardShardingEngine implements ShardingEngine {
         ShardingStrategy tableStrategy = this.tableStrategy.get(tableName);
         String targetTableName = tableStrategy.doSharding(actualTableNames.get(tableName), tableName, columnParams);
 
-        return new ShardingResult(null, targetDatabaseName, targetTableName);
+        String resultSql = handleExecuteSql(targetDatabaseName, targetDatabaseName, tableName, targetTableName, sql);
+        return new ShardingResult(null, targetDatabaseName, targetTableName, resultSql);
     }
 
     private void init() {
@@ -103,5 +108,18 @@ public class StandardShardingEngine implements ShardingEngine {
             databaseStrategy.put(tableName, ShardingStrategyFactory.getShardingStrategy(tableProperties.getDatabaseStrategy()));
             tableStrategy.put(tableName, ShardingStrategyFactory.getShardingStrategy(tableProperties.getTableStrategy()));
         });
+    }
+
+    private boolean checkIsNeedSharding(String tableName) {
+        return databaseStrategy.containsKey(tableName) && tableStrategy.containsKey(tableName);
+    }
+
+    private String handleExecuteSql(String databaseName, String targetDataBaseName,
+                                    String tableName, String targetTableName, String sql) {
+        if (sql.contains(databaseName + "." + tableName)) {
+            return sql.replace(databaseName + "." + tableName, targetDataBaseName + "." + targetTableName);
+        } else {
+            return sql.replace(tableName, targetDataBaseName + "." + targetTableName);
+        }
     }
 }
